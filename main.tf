@@ -16,6 +16,10 @@ resource "aws_cloudwatch_log_group" "kafka_logging" {
   retention_in_days = 30
 }
 
+################################################################################
+# MSK Cluster
+################################################################################
+
 locals {
   server_properties = [
     "num.partitions=${lookup(var.kafka_config, "num.partitions", "15")}",
