@@ -108,6 +108,18 @@ resource "aws_mskconnect_custom_plugin" "this" {
   }
 }
 
+################################################################################
+# Connect Worker Configuration
+################################################################################
+
+resource "aws_mskconnect_worker_configuration" "this" {
+  count = var.create && var.create_connect_worker_configuration ? 1 : 0
+
+  name                    = var.connect_worker_config_name
+  description             = var.connect_worker_config_description
+  properties_file_content = var.connect_worker_config_properties_file_content
+}
+
 resource "aws_route53_record" "kafka_dns_record" {
   for_each = var.no_dns ? {} : { for v in toset(split(",", replace(aws_msk_cluster.kafka_cluster.bootstrap_brokers, ":9092", ""))): v => v }
   zone_id  = data.terraform_remote_state.infra.outputs.route53_zone_id
