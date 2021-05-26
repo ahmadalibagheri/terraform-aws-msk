@@ -1,24 +1,20 @@
-data "terraform_remote_state" "infra" {
-  backend = "s3"
-  config = {
-    bucket = "${var.infra_data_s3_name}"
-    key    = "${var.infra_data_s3_key}"
-    region = "${var.infra_data_s3_region}"
-  }
-}
-
-provider "aws" {
-  region = data.terraform_remote_state.infra.outputs.aws_region
-}
-
 resource "aws_cloudwatch_log_group" "kafka_logging" {
   name = "${data.terraform_remote_state.infra.outputs.environment_name}-${var.name}"
   retention_in_days = 30
 }
 
 ################################################################################
-# MSK Cluster
+# Configuration
 ################################################################################
+
+resource "aws_msk_configuration" "kafka_configuration" {
+  count = var.create ? 1 : 0
+  
+  name              = coalesce(var.configuration_name, var.name)
+  description       = var.configuration_description
+  kafka_versions = [var.kafka_version]
+  server_properties = join("\n", local.server_properties)
+}
 
 locals {
   server_properties = [
@@ -29,12 +25,9 @@ locals {
   ]
 }
 
-resource "aws_msk_configuration" "kafka_configuration" {
-  kafka_versions = [var.kafka_version]
-  name = "${data.terraform_remote_state.infra.outputs.environment_name}-${var.name}"
-
-  server_properties = join("\n", local.server_properties)
-}
+################################################################################
+# MSK Cluster
+################################################################################
 
 resource "aws_msk_cluster" "kafka_cluster" {
   cluster_name = "${data.terraform_remote_state.infra.outputs.environment_name}-${var.name}"
@@ -85,3 +78,6 @@ resource "aws_route53_record" "kafka_dns_record" {
   ttl      = "30"
   records  = [ each.value ]
 }
+
+
+
