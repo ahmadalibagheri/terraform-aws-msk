@@ -70,6 +70,21 @@ resource "aws_msk_cluster" "kafka_cluster" {
   }
 }
 
+################################################################################
+# CloudWatch Log Group
+################################################################################
+
+resource "aws_cloudwatch_log_group" "this" {
+  count = var.create && var.create_cloudwatch_log_group ? 1 : 0
+
+  name              = coalesce(var.cloudwatch_log_group_name, "/aws/msk/${var.name}")
+  retention_in_days = var.cloudwatch_log_group_retention_in_days
+  kms_key_id        = var.cloudwatch_log_group_kms_key_id
+
+  tags = var.tags
+}
+
+
 resource "aws_route53_record" "kafka_dns_record" {
   for_each = var.no_dns ? {} : { for v in toset(split(",", replace(aws_msk_cluster.kafka_cluster.bootstrap_brokers, ":9092", ""))): v => v }
   zone_id  = data.terraform_remote_state.infra.outputs.route53_zone_id
