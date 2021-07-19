@@ -5,7 +5,7 @@ variable "infra_data_s3_key" {}
 variable "name" {}
 variable "kafka_version" { default = "2.2.1" }
 variable "instance_count" { default = 3 }
-variable "instance_type"  {}
+variable "instance_type" {}
 variable "kafka_data_disk" { default = "10" }
 variable "subnets" { default = [] }
 variable "security_groups" { default = [] }
