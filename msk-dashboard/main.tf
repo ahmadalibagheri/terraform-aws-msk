@@ -1,17 +1,17 @@
 data "terraform_remote_state" "infra" {
-    backend = "s3"
-    config  = {
-        bucket     = var.infra_data_s3_name
-        key        = var.infra_data_s3_key
-        region     = var.infra_data_s3_region
-    }
+  backend = "s3"
+  config = {
+    bucket = var.infra_data_s3_name
+    key    = var.infra_data_s3_key
+    region = var.infra_data_s3_region
+  }
 }
 
 resource "kubernetes_service" "kafka-ui" {
-  count = "${var.enabled ? 1 : 0}"  
+  count = var.enabled ? 1 : 0
   metadata {
-    name = "${var.host_name}"
-    namespace = "${var.namespace}"
+    name      = var.host_name
+    namespace = var.namespace
     labels = {
       app = "${var.host_name}"
     }
@@ -34,14 +34,14 @@ resource "kubernetes_service" "kafka-ui" {
 
 
 resource "kubernetes_deployment" "kafka-ui" {
-  count = "${var.enabled ? 1 : 0}"
+  count = var.enabled ? 1 : 0
   metadata {
-    name      = "${var.host_name}"
-    namespace = "${var.namespace}"
+    name      = var.host_name
+    namespace = var.namespace
   }
 
   spec {
-    replicas = "${var.replicas}"
+    replicas = var.replicas
 
     selector {
       match_labels = {
@@ -58,7 +58,7 @@ resource "kubernetes_deployment" "kafka-ui" {
 
       spec {
         container {
-          name  = "${var.host_name}"
+          name  = var.host_name
           image = "${data.terraform_remote_state.infra.outputs.owner_id}.dkr.ecr.${data.terraform_remote_state.infra.outputs.aws_region}.amazonaws.com/kafkauiimage:${var.kafka_ui_image}"
 
           port {
@@ -69,7 +69,7 @@ resource "kubernetes_deployment" "kafka-ui" {
 
           env {
             name  = "KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS"
-            value = "${var.kafka_bootstap}"
+            value = var.kafka_bootstap
           }
 
           env {
@@ -87,10 +87,10 @@ resource "kubernetes_deployment" "kafka-ui" {
 }
 
 resource "kubernetes_ingress" "kafka-ui_internal" {
-  count = "${var.public_ingress ? 1 : 0}"
+  count = var.public_ingress ? 1 : 0
   metadata {
-    name = "${var.host_name}"
-    namespace = "${var.namespace}"
+    name      = var.host_name
+    namespace = var.namespace
     annotations = {
       "alb.ingress.kubernetes.io/group.name" = "default"
 
@@ -112,7 +112,7 @@ resource "kubernetes_ingress" "kafka-ui_internal" {
       http {
         path {
           backend {
-            service_name = "${var.host_name}"
+            service_name = var.host_name
             service_port = "8080"
           }
         }
