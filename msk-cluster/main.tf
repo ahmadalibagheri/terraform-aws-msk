@@ -83,15 +83,3 @@ resource "aws_cloudwatch_log_group" "this" {
 
   tags = var.tags
 }
-
-resource "aws_route53_record" "kafka_dns_record" {
-  for_each = var.no_dns ? {} : { for v in toset(split(",", replace(aws_msk_cluster.kafka_cluster.bootstrap_brokers, ":9092", ""))) : v => v }
-  zone_id  = data.terraform_remote_state.infra.outputs.route53_zone_id
-  name     = "${lower(var.name)}-broker${split("-", split(".", each.value)[0])[1]}.${data.terraform_remote_state.infra.outputs.route53_zone_name}"
-  type     = "CNAME"
-  ttl      = "30"
-  records  = [each.value]
-}
-
-
-
