@@ -11,7 +11,7 @@ variable "name" {
 variable "kafka_version" {
   description = "Specify the desired Kafka software version"
   type        = string
-  default     = null
+  default     = "2.6.2"
 }
 
 variable "number_of_broker_nodes" {
@@ -149,6 +149,11 @@ variable "tags" {
 ################################################################################
 # Configuration
 ################################################################################
+variable "create_msk_configuration" {
+  description = "Determines whether cluster resources will be created"
+  type        = bool
+  default     = true
+}
 
 variable "configuration_name" {
   description = "Name of the configuration"
@@ -165,5 +170,10 @@ variable "configuration_description" {
 variable "configuration_server_properties" {
   description = "Contents of the server.properties file. Supported properties are documented in the [MSK Developer Guide](https://docs.aws.amazon.com/msk/latest/developerguide/msk-configuration-properties.html)"
   type        = map(string)
+  default     = {}
+}
+
+variable "kafka_config" {
+  description = "Tho configuration of kafak"
   default     = {}
 }
