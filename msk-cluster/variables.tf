@@ -177,3 +177,31 @@ variable "kafka_config" {
   description = "Tho configuration of kafak"
   default     = {}
 }
+
+################################################################################
+# CloudWatch Log Group
+################################################################################
+
+variable "create_cloudwatch_log_group" {
+  description = "Determines whether to create a CloudWatch log group"
+  type        = bool
+  default     = true
+}
+
+variable "cloudwatch_log_group_name" {
+  description = "Name of the Cloudwatch Log Group to deliver logs to"
+  type        = string
+  default     = null
+}
+
+variable "cloudwatch_log_group_retention_in_days" {
+  description = "Specifies the number of days you want to retain log events in the log group"
+  type        = number
+  default     = 0
+}
+
+variable "cloudwatch_log_group_kms_key_id" {
+  description = "The ARN of the KMS Key to use when encrypting log data"
+  type        = string
+  default     = null
+}
