@@ -8,6 +8,12 @@ variable "name" {
   default     = "msk" # to avoid: Error: cluster_name must be 1 characters or higher
 }
 
+variable "environment" {
+  description = "Name of the environment"
+  type        = string
+  default     = "test" 
+}
+
 variable "kafka_version" {
   description = "Specify the desired Kafka software version"
   type        = string
