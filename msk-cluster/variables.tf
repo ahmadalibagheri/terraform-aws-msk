@@ -11,7 +11,7 @@ variable "name" {
 variable "environment" {
   description = "Name of the environment"
   type        = string
-  default     = "test" 
+  default     = "test"
 }
 
 variable "kafka_version" {
