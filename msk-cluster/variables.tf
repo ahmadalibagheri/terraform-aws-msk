@@ -1,6 +1,11 @@
 ################################################################################
 # Cluster
 ################################################################################
+variable "create_kafka_cluster" {
+  description = "Determines whether cluster resources will be created"
+  type        = bool
+  default     = true
+}
 
 variable "name" {
   description = "Name of the MSK cluster"
