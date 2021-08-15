@@ -1,6 +1,6 @@
 module "kafka-cluster" {
-  source = "./msk-cluster"
-  name   = "Kafka"
+  source                 = "./msk-cluster"
+  name                   = "Kafka"
   number_of_broker_nodes = 3
   enhanced_monitoring    = "PER_TOPIC_PER_PARTITION"
 
