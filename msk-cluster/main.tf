@@ -25,6 +25,8 @@ locals {
 # ################################################################################
 
 resource "aws_msk_cluster" "this" {
+  depends_on = [aws_msk_configuration.this,aws_cloudwatch_log_group,this]
+
   count = var.create_kafka_cluster ? 1 : 0
 
   cluster_name           = var.name
