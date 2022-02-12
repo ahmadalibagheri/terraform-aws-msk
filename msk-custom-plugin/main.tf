@@ -1,5 +1,5 @@
 ################################################################################
-# Connect Custom Plugin
+# Custom Plugin
 ################################################################################
 
 resource "aws_mskconnect_custom_plugin" "this" {
@@ -23,7 +23,7 @@ resource "aws_mskconnect_custom_plugin" "this" {
 }
 
 ################################################################################
-# Connect Worker Configuration
+# Worker Configuration
 ################################################################################
 
 resource "aws_mskconnect_worker_configuration" "this" {
