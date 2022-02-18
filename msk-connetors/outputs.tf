@@ -106,12 +106,3 @@ output "scram_secret_association_id" {
   description = "Amazon Resource Name (ARN) of the MSK cluster"
   value       = try(aws_msk_scram_secret_association.this[0].id, "")
 }
-
-################################################################################
-# CloudWatch Log Group
-################################################################################
-
-output "log_group_arn" {
-  description = "The Amazon Resource Name (ARN) specifying the log group"
-  value       = try(aws_cloudwatch_log_group.this[0].arn, "")
-}
