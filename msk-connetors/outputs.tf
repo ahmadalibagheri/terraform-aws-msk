@@ -84,16 +84,3 @@ output "log_group_arn" {
   value       = try(aws_cloudwatch_log_group.this[0].arn, "")
 }
 
-################################################################################
-# Configuration
-################################################################################
-
-output "configuration_arn" {
-  description = "Amazon Resource Name (ARN) of the configuration"
-  value       = try(aws_msk_configuration.this[0].arn, "")
-}
-
-output "configuration_latest_revision" {
-  description = "Latest revision of the configuration"
-  value       = try(aws_msk_configuration.this[0].latest_revision, "")
-}
