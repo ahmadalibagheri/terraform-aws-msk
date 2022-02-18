@@ -97,12 +97,3 @@ output "configuration_latest_revision" {
   description = "Latest revision of the configuration"
   value       = try(aws_msk_configuration.this[0].latest_revision, "")
 }
-
-################################################################################
-# Secret(s)
-################################################################################
-
-output "scram_secret_association_id" {
-  description = "Amazon Resource Name (ARN) of the MSK cluster"
-  value       = try(aws_msk_scram_secret_association.this[0].id, "")
-}
